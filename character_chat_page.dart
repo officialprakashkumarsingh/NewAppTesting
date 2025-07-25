@@ -568,14 +568,6 @@ class _CharacterChatPageState extends State<CharacterChatPage> {
                             ],
                           ),
                         ),
-                        if (isUser) ...[
-                          const SizedBox(width: 12),
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: const Color(0xFFEAE9E5),
-                            child: const Icon(Icons.person, size: 20, color: Color(0xFF000000)),
-                          ),
-                        ],
                       ],
                     ),
                   ),
@@ -618,7 +610,7 @@ class _CharacterChatPageState extends State<CharacterChatPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: const Color(0xFFE0E0E0)),
                 boxShadow: [
                   BoxShadow(

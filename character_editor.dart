@@ -22,23 +22,6 @@ class _CharacterEditorState extends State<CharacterEditor> {
   
   final CharacterService _characterService = CharacterService();
   bool _isLoading = false;
-  Color? _selectedBackgroundColor;
-
-  // Predefined background colors for quick selection
-  final List<Color> _backgroundColorOptions = [
-    const Color(0xFFE3F2FD), // Light Blue
-    const Color(0xFFF3E5F5), // Light Purple
-    const Color(0xFFE8F5E8), // Light Green
-    const Color(0xFFFFF3E0), // Light Orange
-    const Color(0xFFFCE4EC), // Light Pink
-    const Color(0xFFE0F2F1), // Light Teal
-    const Color(0xFFF1F8E9), // Light Lime
-    const Color(0xFFFFF8E1), // Light Amber
-    const Color(0xFFEDE7F6), // Light Deep Purple
-    const Color(0xFFE8EAF6), // Light Indigo
-    const Color(0xFFE1F5FE), // Light Light Blue
-    const Color(0xFFE0F7FA), // Light Cyan
-  ];
 
   // Predefined avatar URLs for quick selection
   final List<String> _avatarOptions = [
@@ -84,9 +67,8 @@ class _CharacterEditorState extends State<CharacterEditor> {
     if (widget.character != null) {
       _loadCharacterData();
     } else {
-      // Set default avatar and background color for new characters
+      // Set default avatar for new characters
       _avatarUrlController.text = _avatarOptions.first;
-      _selectedBackgroundColor = _backgroundColorOptions.first;
     }
   }
 
@@ -97,9 +79,6 @@ class _CharacterEditorState extends State<CharacterEditor> {
     _systemPromptController.text = character.systemPrompt;
     _avatarUrlController.text = character.avatarUrl;
     _customTagController.text = character.customTag ?? '';
-    _selectedBackgroundColor = character.backgroundColor != null 
-        ? Color(character.backgroundColor!) 
-        : _backgroundColorOptions.first;
   }
 
   @override
@@ -215,7 +194,7 @@ class _CharacterEditorState extends State<CharacterEditor> {
         customTag: _customTagController.text.trim().isEmpty 
           ? null 
           : _customTagController.text.trim(),
-        backgroundColor: _selectedBackgroundColor?.value,
+        backgroundColor: null,
       );
 
       if (widget.character != null) {
@@ -386,12 +365,6 @@ class _CharacterEditorState extends State<CharacterEditor> {
               
               const SizedBox(height: 24),
               
-              // Background Color Section
-              _buildSectionTitle('Background Color'),
-              const SizedBox(height: 8),
-              _buildColorSelector(),
-              
-              const SizedBox(height: 24),
               
               // System Prompt Field
               Row(
@@ -489,7 +462,7 @@ class _CharacterEditorState extends State<CharacterEditor> {
     return Text(
       title,
       style: GoogleFonts.poppins(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.w600,
         color: Colors.black87,
       ),
@@ -522,62 +495,6 @@ class _CharacterEditorState extends State<CharacterEditor> {
     );
   }
 
-  Widget _buildColorSelector() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Choose a background color for your character',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: _backgroundColorOptions.map((color) {
-              final isSelected = _selectedBackgroundColor?.value == color.value;
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedBackgroundColor = color;
-                  });
-                },
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: isSelected ? Colors.black87 : Colors.grey.shade300,
-                      width: isSelected ? 3 : 1,
-                    ),
-                  ),
-                  child: isSelected
-                      ? const Icon(
-                          Icons.check,
-                          color: Colors.black87,
-                          size: 20,
-                        )
-                      : null,
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _showAvatarSelection() {
     showModalBottomSheet(

@@ -647,33 +647,36 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       appBar: AppBar(
         title: GestureDetector(
           onTap: _showModelSelectionSheet,
-          child: Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'AhamAI',
-                style: GoogleFonts.montserrat(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF000000),
-                ),
-              ),
-              if (_isTemporaryChatMode) ...[
-                const SizedBox(width: 6),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF000000),
-                    shape: BoxShape.circle,
+              if (_isTemporaryChatMode)
+                Text(
+                  'private',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF000000),
                   ),
                 ),
-              ],
-              const SizedBox(width: 8),
-              const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Color(0xFFA3A3A3),
-                size: 20,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'AhamAI',
+                    style: GoogleFonts.spaceMono(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF000000),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Color(0xFFA3A3A3),
+                    size: 20,
+                  ),
+                ],
               ),
             ],
           ),
@@ -711,12 +714,8 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: Colors.transparent, // Remove background
+                  color: Colors.transparent,
                   borderRadius: BorderRadius.circular(21),
-                  border: _isTemporaryChatMode ? Border.all(
-                    color: const Color(0xFF000000),
-                    width: 2,
-                  ) : null,
                 ),
                 child: Material(
                   color: Colors.transparent,
