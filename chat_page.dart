@@ -580,14 +580,6 @@ class ChatPageState extends State<ChatPage> {
         });
         
         _scrollToBottom();
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Image uploaded successfully'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
       }
     } catch (e) {
       print('Error picking image: $e');

@@ -173,11 +173,11 @@ class _AuthPageState extends State<_AuthPage> with TickerProviderStateMixin {
                       
                       // AhamAI Logo - smaller
                       Text(
-                        'AhamAI', 
-                        style: GoogleFonts.montserrat(
-                          fontSize: 36, 
+                        'AhamAI',
+                        style: GoogleFonts.spaceMono(
+                          fontSize: 36,
                           color: const Color(0xFF000000),
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       
