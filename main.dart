@@ -4,11 +4,17 @@ import 'package:flutter/services.dart';
 
 import 'auth_and_profile_pages.dart';
 import 'auth_service.dart';
+import 'character_home_widget.dart';
+import 'package:home_widget/home_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  HomeWidget.registerInteractivityCallback(CharacterHomeWidget.handleCallback);
+  HomeWidget.widgetClicked.listen(CharacterHomeWidget.handleCallback);
+  HomeWidget.initiallyLaunchedFromHomeWidget()
+      .then(CharacterHomeWidget.handleCallback);
   // Initialize the AuthService singleton so it's available everywhere
-  AuthService(); 
+  AuthService();
   
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Color(0xFFF4F3F0),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:home_widget/home_widget.dart';
 import 'character_models.dart';
 import 'models.dart';
 
@@ -15,10 +16,21 @@ class CharacterService extends ChangeNotifier {
   final List<Character> _characters = [];
   Character? _selectedCharacter;
   final Map<String, CharacterChat> _characterChats = {};
+  String? _widgetLaunchCharacterId;
 
   List<Character> get characters => List.unmodifiable(_characters);
   Character? get selectedCharacter => _selectedCharacter;
   Map<String, CharacterChat> get characterChats => Map.unmodifiable(_characterChats);
+  String? consumeWidgetLaunchCharacter() {
+    final id = _widgetLaunchCharacterId;
+    _widgetLaunchCharacterId = null;
+    return id;
+  }
+
+  void setWidgetLaunchCharacter(String id) {
+    _widgetLaunchCharacterId = id;
+    notifyListeners();
+  }
 
   // Built-in characters with interesting personalities
   static List<Character> get builtInCharacters => [
@@ -123,8 +135,28 @@ class CharacterService extends ChangeNotifier {
         _characterChats[key] = CharacterChat.fromJson(value);
       });
     }
-    
+
+    await _updateHomeWidget();
+
     notifyListeners();
+  }
+
+  Future<void> _updateHomeWidget() async {
+    final charactersData = _characters
+        .map((c) => {'id': c.id, 'name': c.name, 'avatar': c.avatarUrl})
+        .toList();
+    try {
+      await HomeWidget.saveWidgetData<String>(
+        'characters',
+        jsonEncode(charactersData),
+      );
+      await HomeWidget.updateWidget(
+        name: 'CharacterWidgetProvider',
+        iOSName: 'CharacterWidget',
+      );
+    } catch (e) {
+      debugPrint('Error updating widget: $e');
+    }
   }
 
   Future<void> _saveCharacters() async {
@@ -143,6 +175,8 @@ class CharacterService extends ChangeNotifier {
     // Save character chats
     final chatsJson = json.encode(_characterChats.map((key, value) => MapEntry(key, value.toJson())));
     await prefs.setString('character_chats', chatsJson);
+
+    await _updateHomeWidget();
   }
 
   Future<void> addCharacter(Character character) async {

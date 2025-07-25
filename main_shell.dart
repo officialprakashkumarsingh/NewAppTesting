@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'chat_page.dart';
+import 'character_chat_page.dart';
 import 'characters_page.dart';
 import 'saved_page.dart';
 import 'models.dart';
 import 'auth_service.dart';
 import 'auth_and_profile_pages.dart';
+import 'character_service.dart';
 
 /* ----------------------------------------------------------
    MAIN SHELL (Tab Navigation)
@@ -71,6 +73,24 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     
     _fabAnimationController.forward();
     _pageTransitionController.forward();
+
+    final pendingId = CharacterService().consumeWidgetLaunchCharacter();
+    if (pendingId != null) {
+      final character = CharacterService().getCharacterById(pendingId);
+      if (character != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CharacterChatPage(
+                character: character,
+                selectedModel: _selectedModel,
+              ),
+            ),
+          );
+        });
+      }
+    }
   }
 
   @override
